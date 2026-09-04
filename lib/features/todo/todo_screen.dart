@@ -1,16 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:todo_project/database/database_helper.dart';
 import 'package:todo_project/features/todo/todo_details.dart';
+import 'package:todo_project/model/todo_model.dart';
 
 class TodoScreen extends StatefulWidget {
-  const TodoScreen({super.key});
+  final TodoModel? todoUpdate;
+  const TodoScreen({super.key, this.todoUpdate});
 
   @override
   State<TodoScreen> createState() => _TodoScreenState();
 }
 
 class _TodoScreenState extends State<TodoScreen> {
-  TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+  late TextEditingController titleController = TextEditingController();
+  late TextEditingController descriptionController = TextEditingController();
+  // it save the data
+  Future saveTodo(String title, String description) async {
+    final finalValue = TodoModel(
+      id: widget.todoUpdate?.id,
+      title: title,
+      description: description,
+    );
+
+    if (widget.todoUpdate?.id == null) {
+      await DatabaseHelper.insertTodo(finalValue);
+    } else {
+      await DatabaseHelper.updateTodo(finalValue);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    titleController = TextEditingController(text: widget.todoUpdate?.title);
+    descriptionController = TextEditingController(
+      text: widget.todoUpdate?.description,
+    );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    titleController.dispose();
+    descriptionController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,12 +75,19 @@ class _TodoScreenState extends State<TodoScreen> {
             Center(
               child: InkWell(
                 onTap: () {
+                  saveTodo(
+                    titleController.text.toString(),
+                    descriptionController.text.toString(),
+                  );
+                  titleController.clear();
+                  descriptionController.clear();
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => TodoDetails()),
                   );
                 },
-                child: Text('Save'),
+                child: Text(widget.todoUpdate?.id == null ? 'Save' : 'Update'),
               ),
             ),
           ],
