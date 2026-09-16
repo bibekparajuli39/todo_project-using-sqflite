@@ -31,7 +31,7 @@ class _TodoScreenState extends State<TodoScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    //
     super.initState();
     titleController = TextEditingController(text: widget.todoUpdate?.title);
     descriptionController = TextEditingController(
@@ -41,7 +41,6 @@ class _TodoScreenState extends State<TodoScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     titleController.dispose();
     descriptionController.dispose();
@@ -52,6 +51,7 @@ class _TodoScreenState extends State<TodoScreen> {
     return Scaffold(
       appBar: AppBar(title: Text('Todo App')),
       body: Container(
+        margin: EdgeInsets.all(1),
         child: Column(
           spacing: 10,
           children: [

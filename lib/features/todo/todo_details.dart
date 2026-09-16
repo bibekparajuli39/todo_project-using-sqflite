@@ -23,7 +23,7 @@ class _TodoDetailsState extends State<TodoDetails> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    //
     super.initState();
     getTodo();
   }
